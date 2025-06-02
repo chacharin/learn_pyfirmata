@@ -1,4 +1,4 @@
-# Arduino Control with PyFirmata
+# Arduino Control with PyFirmata2
 
 โปรเจกต์นี้สาธิตการควบคุม Arduino ด้วย Python โดยใช้ไลบรารี **pyFirmata** ซึ่งสามารถใช้งานร่วมกับ Arduino ที่อัปโหลด **StandardFirmata** ผ่าน Arduino IDE ได้
 
