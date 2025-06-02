@@ -1,29 +1,37 @@
 # servo_control.py
 # ควบคุม Servo Motor ด้วย pyfirmata โดยส่งองศา 0–180 ผ่านขา PWM
 
-from pyfirmata import Arduino
-import time
+from pyfirmata2 import Arduino        
+import time                           
 
-# เชื่อมต่อกับ Arduino ที่พอร์ต COM3
-board = Arduino('COM3')
+# ─────────────────── 1) เชื่อมต่อบอร์ด ───────────────────
+board = Arduino('COM11')
 
-# ตั้งค่าขา D9 เป็น servo
-# 🔸 'd'  = digital pin
-# 🔸 '9'  = หมายเลขขาที่จะควบคุม servo
-# 🔸 's'  = servo (รองรับค่ามุม 0 ถึง 180)
+# ─────────────────── 2) ตั้งขาเป็นโหมด Servo ─────────────
+# get_pin('d:9:s')
+#  • 'd'  = digital pin
+#  • '9'  = หมายเลขขา D9 (รองรับ PWM / Servo)
+#  • 's'  = servo mode  (รับค่ามุม 0–180°)
 servo_pin = board.get_pin('d:9:s')
 
-print("📍 เริ่มควบคุมเซอร์โวมอเตอร์ที่ D9")
+print("📍 เริ่มควบคุมเซอร์โวมอเตอร์ที่ D9 (Ctrl-C เพื่อหยุด)")
 
-while True:
-    # หมุนจาก 0 → 180 องศา ทีละ 30 องศา
-    for angle in range(0, 181, 30):  # 🔸 range(start, stop, step)
-        print(f"➡ หมุนไปที่ {angle}°")
-        servo_pin.write(angle)  # 🔸 ส่งค่าองศาไปยัง servo
-        time.sleep(1)
+try:
+    while True:
+        # ── หมุนจาก 0 → 180 องศา ทีละ 30° ──
+        for angle in range(0, 181, 30):        # range(start, stop, step)
+            print("➡ หมุนไปที่", angle, "°")
+            servo_pin.write(angle)             # write(angle) → ส่งค่ามุม (0-180°)
+            time.sleep(1)                      # หน่วง 1 s ให้หมุนถึงตำแหน่ง
 
-    # หมุนกลับจาก 180 → 0 องศา
-    for angle in range(180, -1, -30):
-        print(f"⬅ หมุนกลับที่ {angle}°")
-        servo_pin.write(angle)
-        time.sleep(1)
+        # ── หมุนกลับจาก 180 → 0 องศา ──
+        for angle in range(180, -1, -30):
+            print("⬅ หมุนกลับที่", angle, "°")
+            servo_pin.write(angle)             # ส่งค่ามุม
+            time.sleep(1)                      # หน่วงให้เซอร์โวหมุนเสร็จ
+
+except KeyboardInterrupt:
+    print("\n ผู้ใช้สั่งหยุดการทำงาน")
+
+finally:
+    board.exit()  # ปิดพอร์ตอย่างปลอดภัยเมื่อจบโปรแกรม

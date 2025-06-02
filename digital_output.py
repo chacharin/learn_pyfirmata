@@ -1,26 +1,26 @@
 # digital_output.py
 # ควบคุมขา Digital เช่นเปิด/ปิด LED โดยใช้ pyfirmata
 
-from pyfirmata import Arduino
-import time
+from pyfirmata2 import Arduino          
+import time                            
 
-# สร้างการเชื่อมต่อกับ Arduino ที่พอร์ต 'COM3'
-# 🔸 หากใช้ Linux ให้ใช้ '/dev/ttyUSB0' หรือ '/dev/ttyACM0'
-board = Arduino('COM3')
+# ─────────────────── เชื่อมต่อบอร์ด
+# Arduino('COM11')
+#   'COM11' คือ Serial Port ของบอร์ดบน Windows
+#   ถ้าเป็น Linux / macOS ให้แก้เป็น '/dev/ttyUSB___' หรือ '/dev/ttyACM____'
+board = Arduino('COM11')  # ⬅ เปลี่ยนตามพอร์ตของคุณ
 
-# สร้างอ้างอิงถึงขา Digital D13 เพื่อใช้งานเป็น output
-# 🔸 'd'  = digital pin
-# 🔸 '13' = หมายเลขขา (D13)
-# 🔸 'o'  = output (ใช้ส่งข้อมูล เช่น เปิด/ปิด)
+# ─────────────────── กำหนดขา D13 เป็น Output
 led_pin = board.get_pin('d:13:o')
 
-print("📍 เริ่มควบคุม LED ที่ D13")
+print("เริ่มควบคุม LED บน D13")
 
+# ─────────────────── วนลูปเปิด/ปิด
 while True:
-    led_pin.write(1)  # 🔸 1 = ON (HIGH voltage) → เปิด LED
+    led_pin.write(1)          # เขียนค่า  1 เปิด LED
     print("💡 เปิด LED")
     time.sleep(1)
 
-    led_pin.write(0)  # 🔸 0 = OFF (LOW voltage) → ปิด LED
+    led_pin.write(0)          # เขียนค่า  0 ปิด LED
     print("🌑 ปิด LED")
     time.sleep(1)
